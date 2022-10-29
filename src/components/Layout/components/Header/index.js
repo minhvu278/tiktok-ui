@@ -7,6 +7,7 @@ import {faCircleXmark, faMagnifyingGlass, faSpinner} from "@fortawesome/free-sol
 import Tippy from "@tippyjs/react/headless";
 import {Wrapper as PopperWrapper} from "~/components/Popper";
 import AccountItem from "~/components/AccountItem";
+import Button from "~/components/Layout/components/Button";
 
 const cx = classNames.bind(styles)
 console.log(images.logo)
@@ -52,7 +53,10 @@ function Header() {
                         </button>
                     </div>
                 </Tippy>
-                <div className={cx('actions')}></div>
+                <div className={cx('actions')}>
+                    <Button text>Upload</Button>
+                    <Button primary>Login</Button>
+                </div>
             </div>
         </header>
     );
