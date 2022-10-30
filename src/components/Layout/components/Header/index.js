@@ -3,8 +3,17 @@ import styles from './Header.module.scss'
 import classNames from "classnames/bind";
 import images from "~/assets/images";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleXmark, faMagnifyingGlass, faSpinner} from "@fortawesome/free-solid-svg-icons";
-import Tippy from "@tippyjs/react/headless";
+import {
+    faCircleXmark, faCoins, faGear,
+    faMagnifyingGlass,
+    faMessage, faSignOut,
+    faSpinner,
+    faUpload,
+    faUser
+} from "@fortawesome/free-solid-svg-icons";
+import Tippy from "@tippyjs/react";
+import HeadLessTippy from "@tippyjs/react/headless";
+import 'tippy.js/dist/tippy.css';
 import {Wrapper as PopperWrapper} from "~/components/Popper";
 import AccountItem from "~/components/AccountItem";
 import Button from "~/components/Layout/components/Button";
@@ -49,6 +58,8 @@ const MENU_ITEMS = [
 
 function Header() {
 
+    const currentUser = true
+
     const [searchResult, setSearchResult] = useState([])
 
     useEffect(() => {
@@ -65,11 +76,36 @@ function Header() {
         }
     }
 
+    const userMenu = [
+        {
+            icon: <FontAwesomeIcon icon={faUser}/>,
+            title: 'view-profile',
+            to: '/@vudo'
+        },
+        {
+            icon: <FontAwesomeIcon icon={faCoins}/>,
+            title: 'Get coins',
+            to: '/coin'
+        },
+        {
+            icon: <FontAwesomeIcon icon={faGear}/>,
+            title: 'Setting',
+            to: '/setting'
+        },
+        ...MENU_ITEMS,
+        {
+            icon: <FontAwesomeIcon icon={faSignOut}/>,
+            title: 'Log out',
+            to: '/logout',
+            separate: true
+        }
+    ]
+
     return (
         <header className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <img src={images.logo} alt="Tiktok"/>
-                <Tippy
+                <HeadLessTippy
                     interactive
                     visible={searchResult.length > 0}
                     render={(attrs) => (
@@ -95,15 +131,31 @@ function Header() {
                             <FontAwesomeIcon icon={faMagnifyingGlass}/>
                         </button>
                     </div>
-                </Tippy>
-                <div className={cx('actions')}>
-                    <Button text>Upload</Button>
-                    <Button primary>Login</Button>
+                </HeadLessTippy>
 
-                    <Menu items={MENU_ITEMS} onChange={handleMenuChange}>
-                        <button className={cx('more-btn')}>
-                            <FontAwesomeIcon icon={faEllipsisVertical}/>
-                        </button>
+                <div className={cx('actions')}>
+                    {currentUser ? (
+                        <>
+                            <Tippy delay={[0, 200]} content="Upload video" placement="bottom">
+                                <button className={cx('action-btn')}>
+                                    <FontAwesomeIcon icon={faUpload} />
+                                </button>
+                            </Tippy>
+                        </>
+                    ) : (
+                        <>
+                            <Button text>Upload</Button>
+                            <Button primary>Login</Button>
+                        </>
+                    )}
+                    <Menu items={currentUser ? userMenu : MENU_ITEMS} onChange={handleMenuChange}>
+                        {currentUser ? (
+                            <img  className={cx('user-avatar')} src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/0f85234bfaa37b6d626db139b6bec70a~c5_100x100.jpeg?x-expires=1667322000&x-signature=6zPkYRIS%2FTNW7k%2FKR%2BGXIgRbFvw%3D" alt="Vu Do"/>
+                        ) : (
+                            <button className={cx('more-btn')}>
+                                <FontAwesomeIcon icon={faEllipsisVertical}/>
+                            </button>
+                        )}
                     </Menu>
                 </div>
             </div>
