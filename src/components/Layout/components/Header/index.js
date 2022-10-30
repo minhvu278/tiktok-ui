@@ -22,6 +22,7 @@ import Menu from "~/components/Popper/Menu";
 import {faEarthAsia} from "@fortawesome/free-solid-svg-icons/faEarthAsia";
 import {faQuestion} from "@fortawesome/free-solid-svg-icons/faQuestion";
 import {faKeyboard} from "@fortawesome/free-solid-svg-icons/faKeyboard";
+import Image from "~/components/Image";
 
 const cx = classNames.bind(styles)
 
@@ -150,7 +151,11 @@ function Header() {
                     )}
                     <Menu items={currentUser ? userMenu : MENU_ITEMS} onChange={handleMenuChange}>
                         {currentUser ? (
-                            <img  className={cx('user-avatar')} src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/0f85234bfaa37b6d626db139b6bec70a~c5_100x100.jpeg?x-expires=1667322000&x-signature=6zPkYRIS%2FTNW7k%2FKR%2BGXIgRbFvw%3D" alt="Vu Do"/>
+                            <Image
+                                className={cx('user-avatar')}
+                                src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/0f85234bfaa37b6d626db139b6bec70a~c5_100x100.jpeg?x-expires=1667322000&x-signature=6zPkYRIS%2FTNW7k%2FKR%2BGXIgRbFvw%3D" alt="Vu Do"
+                                fallback="https://fullstack.edu.vn/static/media/f8-icon.18cd71cfcfa33566a22b.png"
+                            />
                         ) : (
                             <button className={cx('more-btn')}>
                                 <FontAwesomeIcon icon={faEllipsisVertical}/>
