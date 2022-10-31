@@ -8,6 +8,7 @@ import AccountItem from '~/components/AccountItem';
 import {SearchIcon} from '~/components/Icons';
 import styles from './Search.module.scss';
 import {useDebounce} from "~/hooks";
+import * as request from "~/components/utils/request";
 
 const cx = classNames.bind(styles);
 
@@ -28,15 +29,21 @@ function Search() {
         }
         setLoading(true)
 
-        fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounced)}&type=less`)
-            .then((res) => res.json())
-            .then((res) => {
+        const fetchApi = async () => {
+            try {
+                const res = await request.get('users/search', {
+                    params: {
+                        q: debounced,
+                        type: 'less'
+                    },
+                })
                 setSearchResult(res.data)
                 setLoading(false)
-            })
-            .catch(() => {
+            } catch (error) {
                 setLoading(false)
-            })
+            }
+        }
+        fetchApi()
     }, [debounced]);
 
     const handleClear = () => {
@@ -58,7 +65,7 @@ function Search() {
                     <PopperWrapper>
                         <h4 className={cx('search-title')}>Accounts</h4>
                         {searchResult.map((result) => (
-                            <AccountItem key={result.id} data={result} />
+                            <AccountItem key={result.id} data={result}/>
                         ))}
                     </PopperWrapper>
                 </div>
@@ -79,7 +86,7 @@ function Search() {
                         <FontAwesomeIcon icon={faCircleXmark}/>
                     </button>
                 )}
-                {loading &&<FontAwesomeIcon className={cx('loading')} icon={faSpinner}/>}
+                {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner}/>}
 
                 <button className={cx('search-btn')}>
                     <SearchIcon/>
