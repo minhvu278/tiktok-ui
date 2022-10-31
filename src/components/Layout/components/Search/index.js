@@ -8,7 +8,8 @@ import AccountItem from '~/components/AccountItem';
 import {SearchIcon} from '~/components/Icons';
 import styles from './Search.module.scss';
 import {useDebounce} from "~/hooks";
-import * as request from "~/components/utils/request";
+
+import * as searchServices from '~/apiServices/searchServices'
 
 const cx = classNames.bind(styles);
 
@@ -25,25 +26,20 @@ function Search() {
     useEffect(() => {
         if (!debounced.trim()) {
             setSearchResult([])
-            return
+            return;
         }
-        setLoading(true)
 
         const fetchApi = async () => {
-            try {
-                const res = await request.get('users/search', {
-                    params: {
-                        q: debounced,
-                        type: 'less'
-                    },
-                })
-                setSearchResult(res.data)
-                setLoading(false)
-            } catch (error) {
-                setLoading(false)
-            }
+            setLoading(true)
+
+            const result = await searchServices.search(debounced)
+            setSearchResult(result)
+
+            setLoading(false)
         }
+
         fetchApi()
+
     }, [debounced]);
 
     const handleClear = () => {
